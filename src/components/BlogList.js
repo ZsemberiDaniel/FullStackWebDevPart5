@@ -1,10 +1,18 @@
+import { Table, TableBody } from '@material-ui/core';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Blog from './Blog';
 
-const BlogList = ({ blogs, setBlogs, notifyUser }) => {
+const BlogList = () => {
+    const blogs = useSelector(state => state.blogs);
+
     return (
         <div>
-            {blogs.map(blog => <Blog blogs={blogs} setBlogs={setBlogs} blog={blog} notifyUser={notifyUser} key={blog.id} />)}
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableBody>
+                    {blogs.map(blog => <Blog blog={blog} key={blog.id} />)}
+                </TableBody>
+            </Table>
         </div>
     );
 };

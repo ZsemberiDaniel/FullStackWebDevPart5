@@ -5,3 +5,17 @@
 .noti {
     color: green;
 }
+
+.centered{
+    position:absolute;
+    width:200px;
+    height:200px;
+    left:50%;
+    top:50%;
+    margin-left:-100px;
+    margin-top:-200px;
+}
+
+body {
+    background-color: #e0e0e0;
+}

@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import NotificationType from './../NotificationType';
+import { useDispatch } from 'react-redux';
+import { notiMessage } from '../reducers/notification_reducer';
+import { add } from '../reducers/blog_reducer';
+import { Button, TextField } from '@material-ui/core';
 
-const CreateBlog = ({ blogs, setBlogs, notifyUser, createBlogToggleRef, createNewBlog }) => {
+const CreateBlog = ({ createBlogToggleRef }) => {
     const [createBlog, setCreateBlog] = useState({
         title: '', author: '', url: ''
     });
+    const dispatch = useDispatch();
 
     const setBlogTitle = ({ target }) => {
         const newBlog = { ...createBlog, title: target.value };
@@ -22,16 +26,10 @@ const CreateBlog = ({ blogs, setBlogs, notifyUser, createBlogToggleRef, createNe
     const newBlogCreated = (event) => {
         event.preventDefault();
 
-        const promise = createNewBlog(createBlog);
-        if (promise)
-            promise.then(newBlog => {
-                createBlogToggleRef.current.toggleVisibility();
-                setBlogs(blogs.concat(newBlog));
-                notifyUser(NotificationType.MESSAGE, `Blog titled ${newBlog.title} created!`);
-                setCreateBlog({ title: '', author: '', url: '' });
-            }).catch(exception => {
-                notifyUser(NotificationType.ERROR, `Error while creating blog! ${exception.error}`);
-            });
+        createBlogToggleRef.current.toggleVisibility();
+        dispatch(add(createBlog));
+        dispatch(notiMessage(`Blog titled ${createBlog.title} created!`));
+        setCreateBlog({ title: '', author: '', url: '' });
     };
 
     return (
@@ -39,16 +37,16 @@ const CreateBlog = ({ blogs, setBlogs, notifyUser, createBlogToggleRef, createNe
             <h2>Create new blog</h2>
             <form onSubmit={newBlogCreated}>
                 <div>
-                    title: <input type="text" name="title" id="title" value={createBlog.title} onChange={setBlogTitle}/>
+                    <TextField label='Title' type="text" name="title" id="title" value={createBlog.title} onChange={setBlogTitle}/>
                 </div>
                 <div>
-                    author: <input type="text" name="author" id="author" value={createBlog.author} onChange={setBlogAuthor}/>
+                    <TextField label='Author' type="text" name="author" id="author" value={createBlog.author} onChange={setBlogAuthor}/>
                 </div>
                 <div>
-                    url: <input type="text" name="url" id="url" value={createBlog.url} onChange={setBlogUrl}/>
+                    <TextField label='URL' type="text" name="url" id="url" value={createBlog.url} onChange={setBlogUrl}/>
                 </div>
                 <div>
-                    <button type='submit' id="createBlogButton">Create new blog</button>
+                    <Button color='primary' type='submit' id="createBlogButton">Create new blog</Button>
                 </div>
             </form>
         </div>

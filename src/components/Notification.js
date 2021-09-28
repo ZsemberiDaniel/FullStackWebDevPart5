@@ -1,8 +1,17 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Alert } from '@material-ui/lab';
 
-const Notification = ({ errorMsg, notiMsg }) => {
-    const displayErrorMsg = () => <div className='error'>{errorMsg}</div>;
-    const displayNotiMsg = () => <div className='noti'>{notiMsg}</div>;
+const Notification = () => {
+    const errorMsg = useSelector(state => {
+        // console.log(state);
+        return state.notification.errorMsg;
+    });
+    const notiMsg = useSelector(state => {
+        return state.notification.notiMsg;
+    });
+    const displayErrorMsg = () => <Alert severity='error'>{errorMsg}</Alert>;
+    const displayNotiMsg = () => <Alert severity='success'>{notiMsg}</Alert>;
 
     return (
         <div>
